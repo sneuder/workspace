@@ -2,31 +2,27 @@ package action
 
 import (
 	"fmt"
-	"workspace/internal/file"
+	"workspace/internal/docker"
 )
 
-var instructions []string
+// var instructions []string
 
 func Workspace() {
 	fmt.Println("Creating workspace")
 
-	setInstructions()
+	docker.StartImageProcess()
+	docker.StartContainerProcess()
 
-	file.Open()
-
-	for _, value := range instructions {
-		fmt.Println(value)
-	}
-
-	data := []byte("This is a sample byte slice.")
-	file.Write(data)
+	// for _, value := range instructions {
+	// 	fmt.Println(value)
+	// }
 }
 
-func setInstructions() {
-	instructions = append(instructions, "FROM ubuntu:latest")
-	instructions = append(instructions, `CMD ["sleep", "infinity"]`)
-}
+// func setInstructions() {
+// 	instructions = append(instructions, "FROM ubuntu:latest")
+// 	instructions = append(instructions, `CMD ["sleep", "infinity"]`)
+// }
 
-func addInstructions() {
+// func addInstructions() {
 
-}
+// }

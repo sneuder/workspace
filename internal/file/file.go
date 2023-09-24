@@ -1,7 +1,6 @@
 package file
 
 import (
-	"fmt"
 	"os"
 )
 
@@ -20,16 +19,33 @@ func Open() {
 }
 
 func Write(data []byte) {
-	n, err := file.Write(data)
+	var content []byte
+
+	if isFileEmpty() {
+		content = data
+	} else {
+		content = append([]byte("\n\n"), data...)
+	}
+
+	_, err := file.Write(content)
 
 	if err != nil {
 		return
 	}
-	fmt.Printf("n: %v\n", n)
+}
+
+func isFileEmpty() bool {
+	fileInfo, err := file.Stat()
+
+	if err != nil {
+		return false
+	}
+
+	return fileInfo.Size() == 0
 }
 
 func Close() {
-
+	file.Close()
 }
 
 func SetFilePath(newFilePath string) {
