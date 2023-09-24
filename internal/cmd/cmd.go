@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"bufio"
 	"fmt"
 	"os"
-	"bufio"
 	"strings"
 	"workspace/internal/cmd/action"
 )
@@ -17,10 +17,10 @@ func StartTerminal() {
 
 	for {
 		fmt.Print("workspace > ")
-	
+
 		input := receiveInput(reader)
 		input = strings.TrimSpace(input)
-	
+
 		receiveAction(input)
 	}
 }
@@ -39,19 +39,13 @@ func receiveInput(reader *bufio.Reader) string {
 type Action func()
 
 func receiveAction(actionKey string) {
-  // if action, exists := actionsMap[input]; exists {
-  //   action()
-  // } else {
-  //   fmt.Println("command not found")
-  // }
-
-	action, exists := actionsMap[actionKey];
+	action, exists := actionsMap[actionKey]
 
 	if !exists {
 		fmt.Println("command not found")
 		return
 	}
-	
+
 	action()
 }
 
