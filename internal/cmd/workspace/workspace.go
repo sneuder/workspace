@@ -1,4 +1,4 @@
-package action
+package workspace
 
 import (
 	"bufio"
@@ -34,11 +34,36 @@ var dataWorkspace = map[string]model.DataWorkspace{
 	},
 }
 
-func Workspace() {
+func Create() {
 	println("Creating workspace")
 	getDataWorkspace()
 	docker.StartImageProcess(dataWorkspace)
 	// docker.StartContainerProcess()
+}
+
+func Run() {
+
+}
+
+func Ls() {
+
+}
+
+func Stope() {
+
+}
+
+func Remove() {
+
+}
+
+func DecribeCMD() {
+	println("usage: workspace")
+	println("  create 	- Create a workspace.")
+	println("  run 			- Run a workspace")
+	println("  stope    - Stope a workspace")
+	println("  ls    		- List all workspaces")
+	println("  remove   - Remove a workspace.")
 }
 
 func getDataWorkspace() {

@@ -1,7 +1,6 @@
 package docker
 
 import (
-	"fmt"
 	"log"
 	"os/exec"
 	"workspace/internal/file"
@@ -58,5 +57,5 @@ func buildImage() {
 		log.Fatal(err)
 	}
 
-	fmt.Println(outputStr)
+	println(outputStr)
 }
