@@ -9,17 +9,17 @@ import (
 )
 
 func StartImageProcess(dataWorkspace map[string]model.DataWorkspace) {
-	file.Open(dataWorkspace["name"].Value)
+	// file.Open(dataWorkspace["name"].Value)
+	file.Open("dockerfile")
 
 	setImage(dataWorkspace["image"].Value)
 	setUpdate()
 	setTools(dataWorkspace["tools"].Value)
+	setWorkDir()
 
 	setCMD()
 
 	file.Close()
-
-	// buildImage()
 }
 
 func setImage(value string) {
@@ -34,13 +34,17 @@ func setUpdate() {
 
 func setTools(tools string) {
 	toolToInstall := "RUN apt install " + tools + " -y"
-	println(toolToInstall)
 	file.Write([]byte(toolToInstall))
 }
 
 func setCMD() {
 	cmd := `CMD ["sleep", "infinity"]`
 	file.Write([]byte(cmd))
+}
+
+func setWorkDir() {
+	workdir := "WORKDIR /workspace"
+	file.Write([]byte(workdir))
 }
 
 func buildImage() {

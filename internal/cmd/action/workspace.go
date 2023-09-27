@@ -8,6 +8,8 @@ import (
 	"workspace/internal/model"
 )
 
+var orderToGetData = []string{"name", "image", "tools", "bindMount"}
+
 var dataWorkspace = map[string]model.DataWorkspace{
 	"name": {
 		Text:     "Name for workspace: ",
@@ -42,13 +44,19 @@ func Workspace() {
 func getDataWorkspace() {
 	reader := bufio.NewReader(os.Stdin)
 
-	for key, data := range dataWorkspace {
+	for i := 0; i < len(orderToGetData); i++ {
+		data := dataWorkspace[orderToGetData[i]]
 		print(data.Text)
 
 		input, _ := reader.ReadString('\n')
 		input = strings.TrimSpace(input)
 
+		if data.Required && input == "" {
+			i -= 1
+			continue
+		}
+
 		data.Value = input
-		dataWorkspace[key] = data
+		dataWorkspace[orderToGetData[i]] = data
 	}
 }
