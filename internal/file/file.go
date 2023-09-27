@@ -2,16 +2,22 @@ package file
 
 import (
 	"os"
+	"path"
+	"workspace/internal/config"
 )
 
 var filePath string
 var file *os.File
-var fileName string = "dockerfile"
 
-func Open() {
-	f, err := os.Create(fileName)
+var fullPathFile string
+
+func Open(fileName string) {
+
+	fullPathFile = path.Join(config.BasePath, config.Dirs["workspace"], config.Dirs["workspaces"], fileName)
+	f, err := os.Create(fullPathFile)
 
 	if err != nil {
+		println(err)
 		return
 	}
 
@@ -47,9 +53,3 @@ func isFileEmpty() bool {
 func Close() {
 	file.Close()
 }
-
-func SetFilePath(newFilePath string) {
-	filePath = newFilePath
-}
-
-func resetVariables() {}

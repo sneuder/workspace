@@ -8,10 +8,17 @@ import (
 	"workspace/internal/cmd/action"
 )
 
-var actionsMap = make(map[string]Action)
+type ActionCMD func()
+
+var actionsCMD = map[string]ActionCMD{
+	"workspace": action.Workspace,
+	"clear":     action.Clear,
+	"version":   action.Version,
+	"help":      action.Help,
+	"exit":      action.Exit,
+}
 
 func StartTerminal() {
-	setSetting()
 
 	reader := bufio.NewReader(os.Stdin)
 
@@ -36,10 +43,8 @@ func receiveInput(reader *bufio.Reader) string {
 	return input
 }
 
-type Action func()
-
 func receiveAction(actionKey string) {
-	action, exists := actionsMap[actionKey]
+	action, exists := actionsCMD[actionKey]
 
 	if !exists {
 		fmt.Println("command not found")
@@ -47,19 +52,4 @@ func receiveAction(actionKey string) {
 	}
 
 	action()
-}
-
-func setSetting() {
-	setActions()
-}
-
-func setActions() {
-	// basics
-	actionsMap["version"] = action.Version
-	actionsMap["help"] = action.Help
-	actionsMap["clear"] = action.Clear
-	actionsMap["exit"] = action.Exit
-
-	// workspace
-	actionsMap["workspace"] = action.Workspace
 }

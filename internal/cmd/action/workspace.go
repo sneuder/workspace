@@ -1,28 +1,54 @@
 package action
 
 import (
-	"fmt"
+	"bufio"
+	"os"
+	"strings"
 	"workspace/internal/docker"
+	"workspace/internal/model"
 )
 
-// var instructions []string
-
-func Workspace() {
-	fmt.Println("Creating workspace")
-
-	docker.StartImageProcess()
-	docker.StartContainerProcess()
-
-	// for _, value := range instructions {
-	// 	fmt.Println(value)
-	// }
+var dataWorkspace = map[string]model.DataWorkspace{
+	"name": {
+		Text:     "Name for workspace: ",
+		Value:    "",
+		Required: true,
+	},
+	"image": {
+		Text:     "Image for workspace: ",
+		Value:    "",
+		Required: true,
+	},
+	"tools": {
+		Text:     "Tools to include: ",
+		List:     []string{"git", "make"},
+		Value:    "",
+		Required: false,
+	},
+	"bindMount": {
+		Text:     "Path for workspace: ",
+		Value:    "",
+		Required: true,
+	},
 }
 
-// func setInstructions() {
-// 	instructions = append(instructions, "FROM ubuntu:latest")
-// 	instructions = append(instructions, `CMD ["sleep", "infinity"]`)
-// }
+func Workspace() {
+	println("Creating workspace")
+	getDataWorkspace()
+	docker.StartImageProcess(dataWorkspace)
+	// docker.StartContainerProcess()
+}
 
-// func addInstructions() {
+func getDataWorkspace() {
+	reader := bufio.NewReader(os.Stdin)
 
-// }
+	for key, data := range dataWorkspace {
+		print(data.Text)
+
+		input, _ := reader.ReadString('\n')
+		input = strings.TrimSpace(input)
+
+		data.Value = input
+		dataWorkspace[key] = data
+	}
+}

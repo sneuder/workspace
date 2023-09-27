@@ -14,6 +14,7 @@ func Version() {
 func Help() {
 	fmt.Println("Help: This is a CLI application.")
 	fmt.Println("Available Commands:")
+	fmt.Println("  workspace - Create workspace.")
 	fmt.Println("  version - Display the application version.")
 	fmt.Println("  help    - Display help information.")
 	fmt.Println("  clear   - Clear the console screen.")

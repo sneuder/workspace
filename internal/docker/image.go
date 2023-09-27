@@ -5,36 +5,45 @@ import (
 	"log"
 	"os/exec"
 	"workspace/internal/file"
+	"workspace/internal/model"
 )
 
-func StartImageProcess() {
-	file.Open()
+func StartImageProcess(dataWorkspace map[string]model.DataWorkspace) {
+	file.Open(dataWorkspace["name"].Value)
 
-	SetImage()
-	SetUpdate()
-	SetCMD()
+	setImage(dataWorkspace["image"].Value)
+	setUpdate()
+	setTools(dataWorkspace["tools"].Value)
+
+	setCMD()
 
 	file.Close()
 
-	BuildImage()
+	// buildImage()
 }
 
-func SetImage() {
-	image := "FROM ubuntu:latest"
+func setImage(value string) {
+	image := "FROM " + value
 	file.Write([]byte(image))
 }
 
-func SetUpdate() {
-	image := "RUN apt-get update"
-	file.Write([]byte(image))
+func setUpdate() {
+	updata := "RUN apt-get update"
+	file.Write([]byte(updata))
 }
 
-func SetCMD() {
+func setTools(tools string) {
+	toolToInstall := "RUN apt install " + tools + " -y"
+	println(toolToInstall)
+	file.Write([]byte(toolToInstall))
+}
+
+func setCMD() {
 	cmd := `CMD ["sleep", "infinity"]`
 	file.Write([]byte(cmd))
 }
 
-func BuildImage() {
+func buildImage() {
 	cmd := exec.Command("docker", "build", "-t", "testing", ".")
 
 	output, err := cmd.Output()
