@@ -35,8 +35,13 @@ func setVariablesOS() {
 }
 
 func buildDirs() {
-	for _, pathDir := range PathDirs {
+	for mapKey, pathDir := range PathDirs {
 		fullPath := path.Join(BasePath, pathDir)
+		buildFullPathDirs(mapKey, fullPath)
 		os.Mkdir(fullPath, 0755)
 	}
+}
+
+func buildFullPathDirs(dirKey string, pathValue string) {
+	PathDirs[dirKey] = pathValue
 }

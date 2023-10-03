@@ -3,12 +3,12 @@ package docker
 import (
 	"log"
 	"os/exec"
+	"workspace/internal/config"
 	"workspace/internal/file"
 	"workspace/internal/model"
 )
 
 func StartImageProcess(dataWorkspace map[string]model.DataWorkspace) {
-	// file.Open(dataWorkspace["name"].Value)
 	file.Open("dockerfile")
 
 	setImage(dataWorkspace["image"].Value)
@@ -19,6 +19,8 @@ func StartImageProcess(dataWorkspace map[string]model.DataWorkspace) {
 	setCMD()
 
 	file.Close()
+	buildImage(dataWorkspace["name"].Value)
+	file.Rename("dockerfile", dataWorkspace["name"].Value)
 }
 
 func setImage(value string) {
@@ -36,18 +38,18 @@ func setTools(tools string) {
 	file.Write([]byte(toolToInstall))
 }
 
-func setCMD() {
-	cmd := `CMD ["sleep", "infinity"]`
-	file.Write([]byte(cmd))
-}
-
 func setWorkDir() {
 	workdir := "WORKDIR /workspace"
 	file.Write([]byte(workdir))
 }
 
-func buildImage() {
-	cmd := exec.Command("docker", "build", "-t", "testing", ".")
+func setCMD() {
+	cmd := `CMD ["sleep", "infinity"]`
+	file.Write([]byte(cmd))
+}
+
+func buildImage(imageName string) {
+	cmd := exec.Command("docker", "build", "-t", imageName, config.PathDirs["workspaces"])
 
 	output, err := cmd.Output()
 

@@ -1,23 +1,24 @@
 package basics
 
 import (
+	"fmt"
 	"os"
 	"os/exec"
 	"runtime"
 )
 
 func Version() {
-	println("1.0.0")
+	fmt.Println("workspace 1.0.0")
 }
 
 func Help() {
-	println("Help: This is a CLI application.")
-	println("Available Commands:")
-	println("  workspace - Create workspace.")
-	println("  version - Display the application version.")
-	println("  help    - Display help information.")
-	println("  clear   - Clear the console screen.")
-	println("  exit    - Exit the application.")
+	fmt.Println("Help: This is a CLI application.")
+	fmt.Println("Available Commands:")
+	fmt.Printf("  %-10s - %s\n", "workspace", "Create workspace.")
+	fmt.Printf("  %-10s - %s\n", "version", "Display the application version.")
+	fmt.Printf("  %-10s - %s\n", "help", "Display help information.")
+	fmt.Printf("  %-10s - %s\n", "clear", "Clear the console screen.")
+	fmt.Printf("  %-10s - %s\n", "exit", "Exit the application.")
 }
 
 func Clear() {
@@ -32,6 +33,6 @@ func Clear() {
 }
 
 func Exit() {
-	println("Exiting the workspace.")
+	fmt.Println("Exiting the workspace.")
 	os.Exit(0)
 }

@@ -13,7 +13,7 @@ var fullPathFile string
 
 func Open(fileName string) {
 
-	fullPathFile = path.Join(config.BasePath, config.Dirs["workspace"], config.Dirs["workspaces"], fileName)
+	fullPathFile = path.Join(config.PathDirs["workspaces"], fileName)
 	f, err := os.Create(fullPathFile)
 
 	if err != nil {
@@ -48,6 +48,17 @@ func isFileEmpty() bool {
 	}
 
 	return fileInfo.Size() == 0
+}
+
+func Rename(oldName string, newName string) {
+	oldNamePath := path.Join(config.PathDirs["workspaces"], oldName)
+	newNamePath := path.Join(config.PathDirs["workspaces"], newName)
+
+	err := os.Rename(oldNamePath, newNamePath)
+	if err != nil {
+		println("Error renaming the file:", err)
+		return
+	}
 }
 
 func Close() {
