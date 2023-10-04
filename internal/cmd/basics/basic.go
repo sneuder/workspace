@@ -7,11 +7,11 @@ import (
 	"runtime"
 )
 
-func Version() {
+func Version(args []string) {
 	fmt.Println("workspace 1.0.0")
 }
 
-func Help() {
+func Help(args []string) {
 	fmt.Println("Help: This is a CLI application.")
 	fmt.Println("Available Commands:")
 	fmt.Printf("  %-10s - %s\n", "workspace", "Create workspace.")
@@ -21,7 +21,7 @@ func Help() {
 	fmt.Printf("  %-10s - %s\n", "exit", "Exit the application.")
 }
 
-func Clear() {
+func Clear(args []string) {
 	cmd := exec.Command("clear")
 
 	if runtime.GOOS == "windows" {
@@ -32,7 +32,7 @@ func Clear() {
 	cmd.Run()
 }
 
-func Exit() {
+func Exit(args []string) {
 	fmt.Println("Exiting the workspace.")
 	os.Exit(0)
 }

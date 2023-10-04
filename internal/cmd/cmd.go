@@ -8,7 +8,7 @@ import (
 	"workspace/internal/cmd/workspace"
 )
 
-type ActionCMD func()
+type ActionCMD func([]string)
 
 var actionsCMD = map[string]map[string]ActionCMD{
 	"workspace": {
@@ -78,7 +78,7 @@ func receiveAction(actionKeys []string) {
 		return
 	}
 
-	action()
+	action(actionKeys[2:])
 }
 
 func fromStringToArray(str string) []string {

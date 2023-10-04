@@ -1,19 +1,17 @@
 package file
 
 import (
+	"fmt"
 	"os"
 	"path"
 	"workspace/internal/config"
 )
 
-var filePath string
 var file *os.File
-
 var fullPathFile string
 
-func Open(fileName string) {
-
-	fullPathFile = path.Join(config.PathDirs["workspaces"], fileName)
+func Open(fileName string, pathDir string) {
+	fullPathFile = path.Join(pathDir, fileName)
 	f, err := os.Create(fullPathFile)
 
 	if err != nil {
@@ -30,7 +28,7 @@ func Write(data []byte) {
 	if isFileEmpty() {
 		content = data
 	} else {
-		content = append([]byte("\n\n"), data...)
+		content = append([]byte("\n"), data...)
 	}
 
 	_, err := file.Write(content)
@@ -38,6 +36,11 @@ func Write(data []byte) {
 	if err != nil {
 		return
 	}
+}
+
+func Read(filePath string) string {
+	data, _ := os.ReadFile(filePath)
+	return string(data)
 }
 
 func isFileEmpty() bool {
@@ -56,8 +59,7 @@ func Rename(oldName string, newName string) {
 
 	err := os.Rename(oldNamePath, newNamePath)
 	if err != nil {
-		println("Error renaming the file:", err)
-		return
+		fmt.Println("Error renaming the file:", err)
 	}
 }
 

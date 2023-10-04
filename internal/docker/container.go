@@ -1,26 +1,26 @@
 package docker
 
 import (
+	"fmt"
 	"log"
 	"os/exec"
 	"path"
-	"strings"
 	"workspace/internal/config"
-	"workspace/internal/model"
 )
 
 var buildContainerCMD = []string{}
 
-func StartContainerProcess(dataWorkspace map[string]model.DataWorkspace) {
+func StartContainerProcess(dataContainer map[string]string) {
 	setInitializer()
-	setContainerName(dataWorkspace["name"].Value)
-	setBindMount(dataWorkspace["bindMount"].Value)
+	setBindMount(dataContainer["bindMount"])
+	setContainerName(dataContainer["name"])
 
-	// buildContainer()
+	fmt.Println(buildContainerCMD)
+	buildContainer()
 }
 
 func buildContainer() {
-	cmd := exec.Command(strings.Join(buildContainerCMD, " "))
+	cmd := exec.Command(buildContainerCMD[0], buildContainerCMD[1:]...)
 
 	_, err := cmd.Output()
 
@@ -30,7 +30,7 @@ func buildContainer() {
 }
 
 func setInitializer() {
-	buildContainerCMD = append(buildContainerCMD, "docker run -d")
+	buildContainerCMD = append(buildContainerCMD, "docker", "run", "-d")
 }
 
 func setContainerName(workspaceName string) {
@@ -43,6 +43,6 @@ func setExposePort() {
 
 func setBindMount(pathBindMount string) {
 	fullPathBindMount := path.Join(config.BasePath, pathBindMount)
-	bindMountPartCMD := []string{`"type=bind,source=`, fullPathBindMount, `target=$(/workspace)"`}
-	buildContainerCMD = append(buildContainerCMD, strings.Join(bindMountPartCMD, ""))
+	bindMountPartCMD := `type=bind,source=` + fullPathBindMount + `,target=/workspace`
+	buildContainerCMD = append(buildContainerCMD, "--mount", bindMountPartCMD)
 }

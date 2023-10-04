@@ -4,9 +4,13 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path"
 	"strings"
+	"workspace/internal/config"
 	"workspace/internal/docker"
+	"workspace/internal/file"
 	"workspace/internal/model"
+	"workspace/internal/util"
 )
 
 var orderToGetData = []string{"name", "image", "tools", "bindMount"}
@@ -35,35 +39,55 @@ var dataWorkspace = map[string]model.DataWorkspace{
 	},
 }
 
-func Create() {
-	println("Creating workspace")
+var dataContainer = map[string]string{
+	"name":      "",
+	"bindMount": "",
+	"port":      "",
+}
+
+func Create(args []string) {
 	getDataWorkspace()
 	docker.StartImageProcess(dataWorkspace)
+	setConfigFile()
 }
 
-func Run() {
-	docker.StartContainerProcess(dataWorkspace)
+func Run(args []string) {
+	dataContainer["name"] = args[0]
+
+	contentFile := file.Read(path.Join(config.PathDirs["workspaces"], dataContainer["name"]+"-config"))
+	contentFileMap := util.StringToMap(contentFile)
+
+	dataContainer["bindMount"] = contentFileMap["BINDMOUNTPATH"]
+
+	docker.StartContainerProcess(dataContainer)
 }
 
-func Ls() {
+func Ls(args []string) {
 
 }
 
-func Stop() {
+func Stop(args []string) {
 
 }
 
-func Remove() {
+func Remove(args []string) {
 
 }
 
-func DecribeCMD() {
+func DecribeCMD(a []string) {
 	fmt.Println("usage: workspace")
 	fmt.Printf("  %-20s- %s\n", "create", "Create a workspace.")
 	fmt.Printf("  %-20s- %s\n", "run", "Run a workspace")
 	fmt.Printf("  %-20s- %s\n", "stop", "Stop a workspace")
 	fmt.Printf("  %-20s- %s\n", "ls", "List all workspaces")
 	fmt.Printf("  %-20s- %s\n", "remove", "Remove a workspace.")
+}
+
+func setConfigFile() {
+	fileName := dataWorkspace["name"].Value + "-config"
+	file.Open(fileName, config.PathDirs["workspaces"])
+	file.Write([]byte("BINDMOUNTPATH=" + dataWorkspace["bindMount"].Value))
+	file.Close()
 }
 
 func getDataWorkspace() {

@@ -23,7 +23,6 @@ var Dirs = map[string]string{
 func Config() {
 	setVariablesOS()
 	buildDirs()
-
 }
 
 func setVariablesOS() {

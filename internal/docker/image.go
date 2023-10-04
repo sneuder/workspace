@@ -9,7 +9,7 @@ import (
 )
 
 func StartImageProcess(dataWorkspace map[string]model.DataWorkspace) {
-	file.Open("dockerfile")
+	file.Open("dockerfile", config.PathDirs["workspaces"])
 
 	setImage(dataWorkspace["image"].Value)
 	setUpdate()
