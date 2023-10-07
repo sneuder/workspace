@@ -66,3 +66,11 @@ func Rename(oldName string, newName string) {
 func Close() {
 	file.Close()
 }
+
+func ReadDir() {
+
+}
+
+func FilterFiles() {
+
+}

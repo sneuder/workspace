@@ -1,8 +1,9 @@
-package docker
+package image
 
 import (
 	"log"
 	"os/exec"
+	"strings"
 	"workspace/internal/config"
 	"workspace/internal/file"
 	"workspace/internal/model"
@@ -20,7 +21,7 @@ func StartImageProcess(dataWorkspace map[string]model.DataWorkspace) {
 
 	file.Close()
 	buildImage(dataWorkspace["name"].Value)
-	file.Rename("dockerfile", dataWorkspace["name"].Value)
+	file.Rename("dockerfile", dataWorkspace["name"].Value+"-workspace")
 }
 
 func setImage(value string) {
@@ -60,4 +61,19 @@ func buildImage(imageName string) {
 	}
 
 	println(outputStr)
+}
+
+func Exists(imageName string) bool {
+	cmd := exec.Command("docker", "inspect", imageName)
+	_, err := cmd.Output()
+
+	if err == nil {
+		return false
+	}
+
+	if strings.Contains(err.Error(), "No such image") {
+		return false
+	}
+
+	return true
 }

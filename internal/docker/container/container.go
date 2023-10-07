@@ -1,4 +1,4 @@
-package docker
+package container
 
 import (
 	"fmt"
@@ -46,3 +46,5 @@ func setBindMount(pathBindMount string) {
 	bindMountPartCMD := `type=bind,source=` + fullPathBindMount + `,target=/workspace`
 	buildContainerCMD = append(buildContainerCMD, "--mount", bindMountPartCMD)
 }
+
+func Exists() {}
