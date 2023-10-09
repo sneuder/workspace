@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"fmt"
 	"os"
+	"path"
 	"strings"
 	"workspace/internal/config"
 	"workspace/internal/docker/image"
@@ -11,22 +12,46 @@ import (
 )
 
 func Create(args []string) {
+	// validation
+
+	if len(args) == 0 {
+		fmt.Println("workspace name needed")
+		return
+	}
+
+	if len(args) != 0 && validateExistance(args[0]) {
+		fmt.Println("Workspace name already exists")
+		return
+	}
+
+	// seting data
 	setArgs(args)
 	getDataWorkspace()
+
+	// build process
 	image.StartImageProcess(dataWorkspace)
 	setConfigFile()
+
+	// reseting date
 	resetWorkspaceData()
+}
+
+func validateExistance(workspaceName string) bool {
+	filePathWorkspace := path.Join(config.PathDirs["workspaces"], workspaceName+"-workspace")
+	exists := image.Exists(workspaceName) || file.FileExists(filePathWorkspace)
+	return exists
 }
 
 func getDataWorkspace() {
 	reader := bufio.NewReader(os.Stdin)
 
 	for i := 0; i < len(orderToGetData); i++ {
-		if dataWorkspace[orderToGetData[i]].Value != "" {
+		data := dataWorkspace[orderToGetData[i]]
+
+		if data.Value != "" {
 			continue
 		}
 
-		data := dataWorkspace[orderToGetData[i]]
 		fmt.Print(data.Text)
 
 		input, _ := reader.ReadString('\n')

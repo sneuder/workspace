@@ -4,7 +4,7 @@ import (
 	"workspace/internal/model"
 )
 
-var orderToGetData = []string{"name", "image", "tools", "bindMount"}
+var orderToGetData = []string{"image", "tools", "bindMount"}
 
 var dataWorkspace = map[string]model.DataWorkspace{
 	"name": {

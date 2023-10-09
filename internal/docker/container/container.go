@@ -5,6 +5,7 @@ import (
 	"log"
 	"os/exec"
 	"path"
+	"strings"
 	"workspace/internal/config"
 )
 
@@ -47,4 +48,17 @@ func setBindMount(pathBindMount string) {
 	buildContainerCMD = append(buildContainerCMD, "--mount", bindMountPartCMD)
 }
 
-func Exists() {}
+func Exists(containerName string) bool {
+	cmd := exec.Command("docker", "inspect", containerName)
+	_, err := cmd.Output()
+
+	if err == nil {
+		return true
+	}
+
+	if strings.Contains(err.Error(), "No such object") {
+		return false
+	}
+
+	return true
+}

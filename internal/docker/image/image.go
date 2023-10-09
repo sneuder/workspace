@@ -3,7 +3,6 @@ package image
 import (
 	"log"
 	"os/exec"
-	"strings"
 	"workspace/internal/config"
 	"workspace/internal/file"
 	"workspace/internal/model"
@@ -67,11 +66,7 @@ func Exists(imageName string) bool {
 	cmd := exec.Command("docker", "inspect", imageName)
 	_, err := cmd.Output()
 
-	if err == nil {
-		return false
-	}
-
-	if strings.Contains(err.Error(), "No such image") {
+	if err != nil {
 		return false
 	}
 
