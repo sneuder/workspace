@@ -24,16 +24,16 @@ func Create(args []string) {
 		return
 	}
 
-	// seting data
-	setArgs(args)
-	getDataWorkspace()
+	// // seting data
+	// setArgs(args)
+	// getDataWorkspace()
 
-	// build process
-	image.StartImageProcess(dataWorkspace)
-	setConfigFile()
+	// // build process
+	// image.StartImageProcess(dataWorkspace)
+	// setConfigFile()
 
-	// reseting date
-	resetWorkspaceData()
+	// // reseting date
+	// resetWorkspaceData()
 }
 
 func validateExistance(workspaceName string) bool {

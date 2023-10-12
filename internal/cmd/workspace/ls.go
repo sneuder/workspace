@@ -5,6 +5,7 @@ import (
 	"os"
 	"strings"
 	"workspace/internal/config"
+	"workspace/internal/docker"
 )
 
 func Ls(args []string) {
@@ -23,7 +24,39 @@ func Ls(args []string) {
 		}
 
 		fileName = strings.Replace(fileName, "-workspace", "", -1)
+		fmt.Println(getState("main-workspace"))
 		fmt.Println(fileName)
 	}
 
+}
+
+type State string
+
+const (
+	Inactive  State = "inactive"
+	Instanced State = "instanced"
+	Built     State = "built"
+	Running   State = "running"
+)
+
+func getState(workspaceName string) State {
+	containerInfo, _ := docker.GetContainerInfo(workspaceName)
+
+	if containerInfo.ID == "" {
+		return Inactive
+	}
+
+	if containerInfo.State.Status == "" {
+		return Instanced
+	}
+
+	if containerInfo.State.Status == "exited" {
+		return Built
+	}
+
+	if containerInfo.State.Status == "running" {
+		return Running
+	}
+
+	return Instanced
 }
