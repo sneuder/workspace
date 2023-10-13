@@ -51,3 +51,13 @@ func setBindMount(pathBindMount string) {
 	bindMountPartCMD := `type=bind,source=` + fullPathBindMount + `,target=/workspace`
 	buildContainerCMD = append(buildContainerCMD, "--mount", bindMountPartCMD)
 }
+
+func Run(workspaceName string) {
+	cmd := exec.Command("docker", "start", workspaceName)
+	cmd.Output()
+}
+
+func Stop(workspaceName string) {
+	cmd := exec.Command("docker", "container", "stop", workspaceName)
+	cmd.Output()
+}

@@ -32,14 +32,21 @@ func Ls(args []string) {
 type State string
 
 const (
-	Inactive  State = "inactive"
-	Instanced State = "instanced"
-	Built     State = "built"
-	Running   State = "running"
+	Inactive    State = "inactive"
+	Instanced   State = "instanced"
+	Built       State = "built"
+	Running     State = "running"
+	Nonexistent State = "nonexistent"
 )
 
 func getState(workspaceName string) State {
 	containerInfo, _ := docker.GetContainerInfo(workspaceName)
+
+	exists := validateExistance(workspaceName)
+
+	if !exists {
+		return Nonexistent
+	}
 
 	if containerInfo.ID == "" {
 		return Inactive

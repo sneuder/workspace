@@ -16,6 +16,19 @@ func Run(args []string) {
 		return
 	}
 
+	containerState := getState(args[0])
+
+	if containerState == Nonexistent {
+		fmt.Println("workspace does not exists")
+		return
+	}
+
+	// if the container exists and we do not have to built it again
+	if containerState == Built {
+		container.Run(args[0])
+		return
+	}
+
 	dataContainer["name"] = args[0]
 
 	contentFile := file.Read(path.Join(config.PathDirs["workspaces"], dataContainer["name"]+"-config"))
