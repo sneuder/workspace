@@ -24,16 +24,16 @@ func Create(args []string) {
 		return
 	}
 
-	// // seting data
-	// setArgs(args)
-	// getDataWorkspace()
+	// seting data
+	setArgs(args)
+	getDataWorkspace()
 
-	// // build process
-	// image.StartImageProcess(dataWorkspace)
-	// setConfigFile()
+	// build process
+	image.StartImageProcess(dataWorkspace)
+	setConfigFile()
 
-	// // reseting date
-	// resetWorkspaceData()
+	// reseting date
+	resetWorkspaceData()
 }
 
 func validateExistance(workspaceName string) bool {
@@ -70,7 +70,10 @@ func getDataWorkspace() {
 func setConfigFile() {
 	fileName := dataWorkspace["name"].Value + "-config"
 	file.Open(fileName, config.PathDirs["workspaces"])
+
 	file.Write([]byte("BINDMOUNTPATH=" + dataWorkspace["bindMount"].Value))
+	file.Write([]byte("EXPOSEPORTS=" + dataWorkspace["ports"].Value))
+
 	file.Close()
 }
 

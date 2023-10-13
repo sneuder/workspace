@@ -4,7 +4,7 @@ import (
 	"workspace/internal/model"
 )
 
-var orderToGetData = []string{"image", "tools", "bindMount"}
+var orderToGetData = []string{"image", "tools", "ports", "bindMount"}
 
 var dataWorkspace = map[string]model.DataWorkspace{
 	"name": {
@@ -28,10 +28,15 @@ var dataWorkspace = map[string]model.DataWorkspace{
 		Value:    "",
 		Required: true,
 	},
+	"ports": {
+		Text:     "Exposed ports: ",
+		Value:    "",
+		Required: false,
+	},
 }
 
 var dataContainer = map[string]string{
 	"name":      "",
 	"bindMount": "",
-	"port":      "",
+	"ports":     "",
 }

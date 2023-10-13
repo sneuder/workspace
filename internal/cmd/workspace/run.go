@@ -19,7 +19,7 @@ func Run(args []string) {
 	dataContainer["name"] = args[0]
 
 	contentFile := file.Read(path.Join(config.PathDirs["workspaces"], dataContainer["name"]+"-config"))
-	contentFileMap := util.StringToMap(contentFile)
+	contentFileMap := util.StringToMap(contentFile, "=")
 
 	dataContainer["bindMount"] = contentFileMap["BINDMOUNTPATH"]
 

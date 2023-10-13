@@ -24,8 +24,7 @@ func Ls(args []string) {
 		}
 
 		fileName = strings.Replace(fileName, "-workspace", "", -1)
-		fmt.Println(getState("main-workspace"))
-		fmt.Println(fileName)
+		fmt.Printf("- %-10s %s\n", fileName, getState(fileName))
 	}
 
 }

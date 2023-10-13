@@ -3,6 +3,7 @@ package image
 import (
 	"log"
 	"os/exec"
+	"strings"
 	"workspace/internal/config"
 	"workspace/internal/file"
 	"workspace/internal/model"
@@ -15,6 +16,7 @@ func StartImageProcess(dataWorkspace map[string]model.DataWorkspace) {
 	setUpdate()
 	setTools(dataWorkspace["tools"].Value)
 	setWorkDir()
+	setPorts(dataWorkspace["ports"].Value)
 
 	setCMD()
 
@@ -41,6 +43,16 @@ func setTools(tools string) {
 func setWorkDir() {
 	workdir := "WORKDIR /workspace"
 	file.Write([]byte(workdir))
+}
+
+func setPorts(ports string) {
+	collectionPort := strings.Split(ports, " ")
+
+	for _, port := range collectionPort {
+		portToSet := "EXPOSE " + port
+		file.Write([]byte(portToSet))
+	}
+
 }
 
 func setCMD() {
