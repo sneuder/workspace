@@ -22,6 +22,7 @@ func Run(args []string) {
 	contentFileMap := util.StringToMap(contentFile, "=")
 
 	dataContainer["bindMount"] = contentFileMap["BINDMOUNTPATH"]
+	dataContainer["ports"] = contentFileMap["EXPOSEPORTS"]
 
 	container.StartContainerProcess(dataContainer)
 }

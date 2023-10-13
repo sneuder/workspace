@@ -52,7 +52,6 @@ func setPorts(ports string) {
 		portToSet := "EXPOSE " + port
 		file.Write([]byte(portToSet))
 	}
-
 }
 
 func setCMD() {
