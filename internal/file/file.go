@@ -79,3 +79,12 @@ func ReadDir() {
 func FilterFiles() {
 
 }
+
+func Remove(fileName string) {
+	err := os.Remove(fileName)
+
+	if err != nil {
+		fmt.Println("Error:", err)
+		return
+	}
+}

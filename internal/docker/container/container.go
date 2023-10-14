@@ -61,3 +61,8 @@ func Stop(workspaceName string) {
 	cmd := exec.Command("docker", "container", "stop", workspaceName)
 	cmd.Output()
 }
+
+func Remove(workspaceName string) {
+	cmd := exec.Command("docker", "container", "rm", workspaceName)
+	cmd.Output()
+}

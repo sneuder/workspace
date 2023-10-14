@@ -16,7 +16,7 @@ var actionsCMD = map[string]map[string]ActionCMD{
 		"create":    workspace.Create,
 		"run":       workspace.Run,
 		"stop":      workspace.Stop,
-		"remove":    workspace.Remove,
+		"rm":        workspace.Remove,
 		"ls":        workspace.Ls,
 	},
 	"clear": {
