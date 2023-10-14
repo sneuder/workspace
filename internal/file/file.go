@@ -72,14 +72,6 @@ func FileExists(filename string) bool {
 	return !os.IsNotExist(err)
 }
 
-func ReadDir() {
-
-}
-
-func FilterFiles() {
-
-}
-
 func Remove(fileName string) {
 	err := os.Remove(fileName)
 

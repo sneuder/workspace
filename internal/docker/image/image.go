@@ -36,6 +36,10 @@ func setUpdate() {
 }
 
 func setTools(tools string) {
+	if tools == "" {
+		return
+	}
+
 	toolToInstall := "RUN apt install " + tools + " -y"
 	file.Write([]byte(toolToInstall))
 }
@@ -46,6 +50,10 @@ func setWorkDir() {
 }
 
 func setPorts(ports string) {
+	if ports == "" {
+		return
+	}
+
 	collectionPort := strings.Split(ports, " ")
 
 	for _, port := range collectionPort {

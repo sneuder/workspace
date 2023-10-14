@@ -36,12 +36,14 @@ func Run(args []string) {
 		rebuildImage(workspaceName)
 	}
 
+	// build the container process
+
 	dataContainer["name"] = workspaceName
 
 	contentFile := file.Read(path.Join(config.PathDirs["workspaces"], dataContainer["name"]+"-config"))
 	contentFileMap := util.StringToMap(contentFile, "=")
 
-	dataContainer["bindMount"] = contentFileMap["BINDMOUNTPATH"]
+	dataContainer["bindmount"] = contentFileMap["BINDMOUNTPATH"]
 	dataContainer["ports"] = contentFileMap["EXPOSEPORTS"]
 
 	container.StartContainerProcess(dataContainer)
