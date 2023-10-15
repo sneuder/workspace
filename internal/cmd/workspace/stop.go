@@ -12,7 +12,6 @@ func Stop(args []string) {
 	}
 
 	workspaceName := args[0]
-
 	containerState := getState(workspaceName)
 
 	if containerState == Nonexistent {

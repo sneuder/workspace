@@ -20,6 +20,23 @@ func StartContainerProcess(dataContainer map[string]string) {
 	buildContainer()
 }
 
+func Run(workspaceName string) {
+	cmd := exec.Command("docker", "start", workspaceName)
+	cmd.Output()
+}
+
+func Stop(workspaceName string) {
+	cmd := exec.Command("docker", "container", "stop", workspaceName)
+	cmd.Output()
+}
+
+func Remove(workspaceName string) {
+	cmd := exec.Command("docker", "container", "rm", workspaceName)
+	cmd.Output()
+}
+
+//...
+
 func buildContainer() {
 	cmd := exec.Command(buildContainerCMD[0], buildContainerCMD[1:]...)
 
@@ -54,19 +71,4 @@ func setBindMount(pathBindMount string) {
 	fullPathBindMount := path.Join(config.BasePath, pathBindMount)
 	bindMountPartCMD := `type=bind,source=` + fullPathBindMount + `,target=/workspace`
 	buildContainerCMD = append(buildContainerCMD, "--mount", bindMountPartCMD)
-}
-
-func Run(workspaceName string) {
-	cmd := exec.Command("docker", "start", workspaceName)
-	cmd.Output()
-}
-
-func Stop(workspaceName string) {
-	cmd := exec.Command("docker", "container", "stop", workspaceName)
-	cmd.Output()
-}
-
-func Remove(workspaceName string) {
-	cmd := exec.Command("docker", "container", "rm", workspaceName)
-	cmd.Output()
 }

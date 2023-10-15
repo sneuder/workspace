@@ -24,6 +24,8 @@ func Create(args []string) {
 		return
 	}
 
+	fmt.Println("Creating workspace...")
+
 	// seting data
 	setArgs(args)
 	getDataWorkspace()

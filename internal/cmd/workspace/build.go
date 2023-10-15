@@ -33,12 +33,12 @@ func Build(args []string) {
 		return
 	}
 
+	fmt.Println("Building workspace...")
+
 	configWorkspace.BindMount = util.JoinPathArgs(args)
 	setWokspaceInfo(configWorkspace)
 
 	args[0] = configWorkspace.Name
-
-	fmt.Println("Building workspace...")
 
 	Create(args)
 }

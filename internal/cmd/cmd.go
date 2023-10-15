@@ -35,7 +35,6 @@ var actionsCMD = map[string]map[string]ActionCMD{
 }
 
 func StartTerminal() {
-
 	reader := bufio.NewReader(os.Stdin)
 
 	for {
@@ -48,8 +47,7 @@ func StartTerminal() {
 			continue
 		}
 
-		inputs := fromStringToArray(input)
-
+		inputs := strings.Split(input, " ")
 		receiveAction(inputs)
 	}
 }
@@ -80,9 +78,4 @@ func receiveAction(actionKeys []string) {
 	}
 
 	action(actionKeys[2:])
-}
-
-func fromStringToArray(str string) []string {
-	words := strings.Split(str, " ")
-	return words
 }

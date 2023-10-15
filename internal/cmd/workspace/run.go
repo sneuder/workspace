@@ -37,7 +37,7 @@ func Run(args []string) {
 	}
 
 	// build the container process
-
+	fmt.Println("Stating workspace...")
 	dataContainer["name"] = workspaceName
 
 	contentFile := file.Read(path.Join(config.PathDirs["workspaces"], dataContainer["name"]+"-config"))
@@ -47,6 +47,7 @@ func Run(args []string) {
 	dataContainer["ports"] = contentFileMap["EXPOSEPORTS"]
 
 	container.StartContainerProcess(dataContainer)
+	fmt.Println("Workspace running")
 }
 
 func rebuildImage(workspaceName string) {
