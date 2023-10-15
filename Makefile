@@ -1,57 +1,44 @@
-CONTAINER_NAME := cli-workspace
-IMAGE_NAME := cli-workspace
+# Variables for output directory names
+WINDOWS_64_DIR_NAME = windows-amd64
+WINDOWS_32_DIR_NAME = windows-386
+LINUX_64_DIR_NAME = linux-amd64
+LINUX_32_DIR_NAME = linux-386
 
-BIND_PATH := $(shell pwd)
+# Name of the output binary
+OUTPUT_BINARY = workspace
 
-WORKDIR_DOCKER := /app
+# Variables for output directories
+WINDOWS_64_DIR = bin/windows/$(WINDOWS_64_DIR_NAME)
+WINDOWS_32_DIR = bin/windows/$(WINDOWS_32_DIR_NAME)
+LINUX_64_DIR = bin/linux/$(LINUX_64_DIR_NAME)
+LINUX_32_DIR = bin/linux/$(LINUX_32_DIR_NAME)
 
-remove-container:
-ifneq ($(shell docker ps -aq -f name=$(CONTAINER_NAME)),)
-	@docker container stop $(CONTAINER_NAME)
-	@docker container rm $(CONTAINER_NAME)
-	@echo "Container $(CONTAINER_NAME) removed"
-else
-	@echo "Container $(CONTAINER_NAME) not found"
-endif
+PATH_MAIN = cmd/workspace/main.go
 
-remove-image:
-ifneq ($(shell docker image ls -q $(IMAGE_NAME)),)
-	@docker image rm $(IMAGE_NAME)
-	@echo "Image $(IMAGE_NAME) removed"
-else
-	@echo "Image $(IMAGE_NAME) not found"
-endif
+.PHONY: all windows linux clean
 
-# image process
+all: windows linux
 
-build-image:
-	@docker build -t $(IMAGE_NAME) .
+windows: windows_64 windows_32
 
-build-container:
-	@docker run -d -p 3000:4200 --name $(CONTAINER_NAME) $(IMAGE_NAME)
+linux: linux_64 linux_32
 
-stop-container:
-	@docker container stop $(CONTAINER_NAME)
+windows_64:
+	GOOS=windows GOARCH=amd64 go build -o $(WINDOWS_64_DIR)/$(OUTPUT_BINARY)-$(WINDOWS_64_DIR_NAME).exe $(PATH_MAIN)
 
-build-container-bind:
-	@docker run --mount "type=bind,source=$(BIND_PATH),target=$(WORKDIR_DOCKER)" --name $(CONTAINER_NAME) $(IMAGE_NAME)
+windows_32:
+	GOOS=windows GOARCH=386 go build -o $(WINDOWS_32_DIR)/$(OUTPUT_BINARY)-$(WINDOWS_32_DIR_NAME).exe $(PATH_MAIN)
 
-# for prod and dev
+linux_64:
+	GOOS=linux GOARCH=amd64 go build -o $(LINUX_64_DIR)/$(OUTPUT_BINARY)-$(LINUX_64_DIR_NAME) $(PATH_MAIN)
 
-run-prod: remove-container remove-image build-image build-container
-	@echo "Container running in prod"
+linux_32:
+	GOOS=linux GOARCH=386 go build -o $(LINUX_32_DIR)/$(OUTPUT_BINARY)-$(LINUX_32_DIR_NAME) $(PATH_MAIN)
 
-run-dev: 
-ifneq ($(shell docker ps -aq -f name=$(CONTAINER_NAME)),)
-	@echo "Container $(CONTAINER_NAME) running in dev"
-	@docker start -a $(CONTAINER_NAME)
-else
-	@echo "Container $(CONTAINER_NAME) not found. Building and running..."
-	@make -s remove-container
-	@make -s remove-image
-	@make -s build-image
-	@make -s build-container-bind
-endif
-
-run-dev-restart: remove-container remove-image build-image build-container-bind
-	@echo "Container $(CONTAINER_NAME) running in dev"
+clean:
+	rm -f $(WINDOWS_64_DIR)/$(OUTPUT_BINARY)-$(WINDOWS_64_DIR_NAME).exe
+	rm -f $(WINDOWS_32_DIR)/$(OUTPUT_BINARY)-$(WINDOWS_32_DIR_NAME).exe
+	rm -f $(LINUX_64_DIR)/$(OUTPUT_BINARY)-$(LINUX_64_DIR_NAME)
+	rm -f $(LINUX_32_DIR)/$(OUTPUT_BINARY)-$(LINUX_32_DIR_NAME)
+	rm -rf bin
+	
