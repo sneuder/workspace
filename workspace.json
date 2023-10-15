@@ -1,6 +1,6 @@
 {
-  "name": "esneider2",
+  "name": "workspace",
   "image": "golang:1.21.1-bookworm",
-  "tools": [],
+  "tools": ["git", "make"],
   "ports": []
 }
