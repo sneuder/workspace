@@ -1,7 +1,14 @@
 {
   "name": "cliworkspace",
-  "image": "golang:1.21.1-bookworm",
-  "tools": ["git", "make", "zip"],
-  "networks": ["mynetwork"],
-  "ports": []
+  "version": 2.0,
+  "workspaces": [
+    {
+      "name": "cliworkspace",
+      "image": "golang:1.21.1",
+      "tools": ["git", "make", "zip"],
+      "networks": [],
+      "ports": [],
+      "cmd": []
+    }
+  ]
 }
