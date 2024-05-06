@@ -1,5 +1,7 @@
 package models
 
+import "github.com/urfave/cli/v2"
+
 type DataWorkspace struct {
 	Text       string
 	Value      string
@@ -49,4 +51,12 @@ type ContainerInfo struct {
 	Created string         `json:"Created"`
 	Path    string         `json:"Path"`
 	State   ContainerState `json:"State"`
+}
+
+type InputCMD *cli.App
+
+type CollectionInputs map[string]*cli.App
+
+func GenerateEmptyCollectionInputs() CollectionInputs {
+	return map[string]*cli.App{}
 }
