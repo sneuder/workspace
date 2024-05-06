@@ -8,18 +8,16 @@ import (
 	"workspace/internal/config"
 )
 
-var buildContainerCMD = []string{}
-
 func StartContainerProcess(dataContainer map[string]string) {
-	defer resetContainerCMD()
-	setInitializer()
+	var buildContainerCMD = []string{}
 
-	setBindMount(dataContainer["bindmount"])
-	setExposePort(dataContainer["ports"])
-	setNetworks(dataContainer["networks"])
-	setContainerName(dataContainer["name"])
+	buildContainerCMD = append(buildContainerCMD, getInitializer()...)
+	buildContainerCMD = append(buildContainerCMD, getBindMount(dataContainer["bindmount"])...)
+	buildContainerCMD = append(buildContainerCMD, getExposePorts(dataContainer["ports"])...)
+	buildContainerCMD = append(buildContainerCMD, getNetworks(dataContainer["networks"])...)
+	buildContainerCMD = append(buildContainerCMD, getContainerName(dataContainer["name"])...)
 
-	buildContainer()
+	buildContainer(buildContainerCMD)
 }
 
 func StartContainer(workspaceName string) {
@@ -37,9 +35,9 @@ func RemoveContainer(workspaceName string) {
 	cmd.Output()
 }
 
-//...
+// composers
 
-func buildContainer() {
+func buildContainer(buildContainerCMD []string) {
 	cmd := exec.Command(buildContainerCMD[0], buildContainerCMD[1:]...)
 	_, err := cmd.Output()
 
@@ -48,44 +46,55 @@ func buildContainer() {
 	}
 }
 
-func setInitializer() {
-	buildContainerCMD = append(buildContainerCMD, "docker", "run", "-d")
+func getInitializer() []string {
+	return []string{
+		"docker", "run", "-d",
+	}
 }
 
-func setContainerName(workspaceName string) {
-	buildContainerCMD = append(buildContainerCMD, "--name", workspaceName, workspaceName)
+func getContainerName(workspaceName string) []string {
+	return []string{
+		"--name", workspaceName, workspaceName,
+	}
 }
 
-func setExposePort(exposePorts string) {
+func getExposePorts(exposePorts string) []string {
+	var portsCMD []string
+
 	if exposePorts == "" {
-		return
+		return portsCMD
 	}
 
 	collectionPort := strings.Split(exposePorts, " ")
 
 	for _, port := range collectionPort {
-		buildContainerCMD = append(buildContainerCMD, "-p", port+":"+port)
+		portsCMD = append(portsCMD, "-p", port+":"+port)
+	}
+
+	return portsCMD
+}
+
+func getBindMount(pathBindMount string) []string {
+	fullPathBindMount := path.Join(config.BasePath, pathBindMount)
+	bindMountPartCMD := `type=bind,source=` + fullPathBindMount + `,target=/workspace`
+
+	return []string{
+		"--mount", bindMountPartCMD,
 	}
 }
 
-func setBindMount(pathBindMount string) {
-	fullPathBindMount := path.Join(config.BasePath, pathBindMount)
-	bindMountPartCMD := `type=bind,source=` + fullPathBindMount + `,target=/workspace`
-	buildContainerCMD = append(buildContainerCMD, "--mount", bindMountPartCMD)
-}
+func getNetworks(networks string) []string {
+	var networksCMD []string
 
-func setNetworks(networks string) {
 	if networks == "" {
-		return
+		return networksCMD
 	}
 
 	collectionNetwork := strings.Split(networks, " ")
 
 	for _, network := range collectionNetwork {
-		buildContainerCMD = append(buildContainerCMD, "--network="+network)
+		networksCMD = append(networksCMD, "--network="+network)
 	}
-}
 
-func resetContainerCMD() {
-	buildContainerCMD = []string{}
+	return networksCMD
 }
