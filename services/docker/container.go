@@ -8,7 +8,7 @@ import (
 	"workspace/internal/config"
 )
 
-func StartContainerProcess(dataContainer map[string]string) {
+func BuildContainerCMD(dataContainer map[string]string) []string {
 	var buildContainerCMD = []string{}
 
 	buildContainerCMD = append(buildContainerCMD, getInitializer()...)
@@ -17,7 +17,16 @@ func StartContainerProcess(dataContainer map[string]string) {
 	buildContainerCMD = append(buildContainerCMD, getNetworks(dataContainer["networks"])...)
 	buildContainerCMD = append(buildContainerCMD, getContainerName(dataContainer["name"])...)
 
-	buildContainer(buildContainerCMD)
+	return buildContainerCMD
+}
+
+func BuildContainer(buildContainerCMD []string) {
+	cmd := exec.Command(buildContainerCMD[0], buildContainerCMD[1:]...)
+	_, err := cmd.Output()
+
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func StartContainer(workspaceName string) {
@@ -36,15 +45,6 @@ func RemoveContainer(workspaceName string) {
 }
 
 // composers
-
-func buildContainer(buildContainerCMD []string) {
-	cmd := exec.Command(buildContainerCMD[0], buildContainerCMD[1:]...)
-	_, err := cmd.Output()
-
-	if err != nil {
-		log.Fatal(err)
-	}
-}
 
 func getInitializer() []string {
 	return []string{

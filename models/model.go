@@ -1,4 +1,4 @@
-package model
+package models
 
 type DataWorkspace struct {
 	Text       string

@@ -1,40 +1,29 @@
 package docker
 
 import (
-	"log"
+	"os"
 	"os/exec"
 	"strings"
-	"workspace/internal/config"
-	"workspace/internal/file"
-	"workspace/internal/model"
+	"workspace/config"
+	"workspace/file"
+	"workspace/models"
 )
 
-func StartImageProcess(dataWorkspace map[string]model.DataWorkspace) {
-	file.Open("dockerfile", config.PathDirs["workspaces"])
+func BuildDockerFile(dataWorkspace map[string]models.DataWorkspace) {
+	_, newFile := file.OpenFile("dockerfile", config.PathDirs["workspaces"])
+	defer file.CloseFile(newFile)
 
-	setImage(dataWorkspace["image"].Value)
-	setUpdate()
-	setTools(dataWorkspace["tools"].Value)
-	setWorkDir()
-	setPorts(dataWorkspace["ports"].Value)
-
-	setCMD()
-
-	file.Close()
-	CreateImage(dataWorkspace["name"].Value)
-	file.Rename("dockerfile", dataWorkspace["name"].Value+"-workspace")
+	setImage(dataWorkspace["image"].Value, newFile)
+	setUpdate(newFile)
+	setTools(dataWorkspace["tools"].Value, newFile)
+	setWorkDir(newFile)
+	setPorts(dataWorkspace["ports"].Value, newFile)
+	setCMD(newFile)
 }
 
 func CreateImage(imageName string) {
 	cmd := exec.Command("docker", "build", "-t", imageName, config.PathDirs["workspaces"])
-	output, err := cmd.Output()
-	outputStr := string(output)
-
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	println(outputStr)
+	cmd.Output()
 }
 
 func RemoveImage(workspaceName string) {
@@ -45,27 +34,22 @@ func RemoveImage(workspaceName string) {
 func ExistsImage(imageName string) bool {
 	cmd := exec.Command("docker", "inspect", imageName)
 	_, err := cmd.Output()
-
-	if err != nil {
-		return false
-	}
-
-	return true
+	return err != nil
 }
 
-//...
+//composers
 
-func setImage(value string) {
+func setImage(value string, file *os.File) {
 	image := "FROM " + value
 	file.Write([]byte(image))
 }
 
-func setUpdate() {
+func setUpdate(file *os.File) {
 	updata := "RUN apt-get update"
 	file.Write([]byte(updata))
 }
 
-func setTools(tools string) {
+func setTools(tools string, file *os.File) {
 	if tools == "" {
 		return
 	}
@@ -74,12 +58,12 @@ func setTools(tools string) {
 	file.Write([]byte(toolToInstall))
 }
 
-func setWorkDir() {
+func setWorkDir(file *os.File) {
 	workdir := "WORKDIR /workspace"
 	file.Write([]byte(workdir))
 }
 
-func setPorts(ports string) {
+func setPorts(ports string, file *os.File) {
 	if ports == "" {
 		return
 	}
@@ -92,7 +76,7 @@ func setPorts(ports string) {
 	}
 }
 
-func setCMD() {
+func setCMD(file *os.File) {
 	cmd := `CMD ["sleep", "infinity"]`
 	file.Write([]byte(cmd))
 }

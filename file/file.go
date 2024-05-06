@@ -7,25 +7,23 @@ import (
 	"workspace/internal/config"
 )
 
-var file *os.File
 var fullPathFile string
 
-func OpenFile(fileName string, pathDir string) {
+func OpenFile(fileName string, pathDir string) (error, *os.File) {
 	fullPathFile = path.Join(pathDir, fileName)
 	f, err := os.Create(fullPathFile)
 
 	if err != nil {
-		println(err)
-		return
+		return err, f
 	}
 
-	file = f
+	return nil, f
 }
 
-func WriteFile(data []byte) {
+func WriteFile(data []byte, file *os.File) {
 	var content []byte
 
-	if isEmptyFile() {
+	if isEmptyFile(file) {
 		content = data
 	} else {
 		content = append([]byte("\n"), data...)
@@ -43,7 +41,7 @@ func ReadFile(filePath string) string {
 	return string(data)
 }
 
-func isEmptyFile() bool {
+func isEmptyFile(file *os.File) bool {
 	fileInfo, err := file.Stat()
 
 	if err != nil {
@@ -63,7 +61,7 @@ func RenameFile(oldName string, newName string) {
 	}
 }
 
-func CloseFile() {
+func CloseFile(file *os.File) {
 	file.Close()
 }
 
