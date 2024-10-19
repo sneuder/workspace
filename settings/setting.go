@@ -12,6 +12,7 @@ import (
 
 func SetCmd() {
 	cmd := &cli.App{
+		Action: cmd.CmdExecuteAction,
 		Commands: []*cli.Command{
 			cmd.GetAddContainerCmd(),
 			cmd.GetRemoveContainerCmd(),
@@ -31,6 +32,6 @@ func SetFolder() {
 
 func SetJsonFile() {
 	wkspaceFolder := helpers.GetWkspaceFolder()
-	data := []schemas.Workspaces{}
+	data := []schemas.Workspace{}
 	helpers.CreateJSONFile(data, wkspaceFolder, "wkspace")
 }

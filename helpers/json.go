@@ -30,14 +30,18 @@ func CreateJSONFile(data interface{}, path string, filename string) error {
 	return nil
 }
 
-func ReadJSONFile(filename string, path string) ([]byte, error) {
+func ReadJSONFile(path string, filename string, out interface{}) error {
 	fullPathFile := filepath.Join(path, filename+".json")
 	data, err := os.ReadFile(fullPathFile)
 	if err != nil {
-		return nil, fmt.Errorf("error opening file: %w", err)
+		return fmt.Errorf("error opening file: %w", err)
 	}
 
-	return data, nil
+	if err := json.Unmarshal(data, &out); err != nil {
+		return fmt.Errorf("error unmarshaling JSON: %w", err)
+	}
+
+	return nil
 }
 
 func CheckJSONFile(path string, filename string) bool {

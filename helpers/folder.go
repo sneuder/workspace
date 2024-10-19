@@ -5,6 +5,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"workspace/constants"
 )
 
 func GetHomeDir() string {
@@ -23,5 +24,5 @@ func CreateFolder(pathFolder string, folerName string) {
 
 func GetWkspaceFolder() string {
 	folderDir := GetHomeDir()
-	return filepath.Join(folderDir, "./.wkspace")
+	return filepath.Join(folderDir, constants.FOLDER_WKSPACE)
 }

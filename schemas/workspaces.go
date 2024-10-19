@@ -1,5 +1,6 @@
 package schemas
 
-type Workspaces struct {
+type Workspace struct {
 	Name string
+	Id   string
 }
