@@ -40,7 +40,7 @@ func ReadJSONFile(filename string, path string) ([]byte, error) {
 	return data, nil
 }
 
-func CheckJSONFile(filename string, path string) bool {
+func CheckJSONFile(path string, filename string) bool {
 	fullPathFile := filepath.Join(path, filename+".json")
 	if _, err := os.Stat(fullPathFile); err != nil {
 		if os.IsNotExist(err) {

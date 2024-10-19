@@ -5,6 +5,7 @@ import (
 	"os"
 	"workspace/cmd"
 	"workspace/helpers"
+	"workspace/schemas"
 
 	"github.com/urfave/cli/v2"
 )
@@ -26,4 +27,10 @@ func SetCmd() {
 func SetFolder() {
 	homerDir := helpers.GetHomeDir()
 	helpers.CreateFolder(homerDir, ".wkspace")
+}
+
+func SetJsonFile() {
+	wkspaceFolder := helpers.GetWkspaceFolder()
+	data := []schemas.Workspaces{}
+	helpers.CreateJSONFile(data, wkspaceFolder, "wkspace")
 }

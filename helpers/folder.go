@@ -20,3 +20,8 @@ func CreateFolder(pathFolder string, folerName string) {
 	fullPathNameFolder := filepath.Join(pathFolder, folerName)
 	exec.Command("mkdir", "-p", fullPathNameFolder).Run()
 }
+
+func GetWkspaceFolder() string {
+	folderDir := GetHomeDir()
+	return filepath.Join(folderDir, "./.wkspace")
+}
