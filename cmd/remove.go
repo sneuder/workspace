@@ -1,6 +1,11 @@
 package cmd
 
-import "github.com/urfave/cli/v2"
+import (
+	"log"
+	"workspace/helpers"
+
+	"github.com/urfave/cli/v2"
+)
 
 func GetRemoveContainerCmd() *cli.Command {
 	return &cli.Command{
@@ -12,5 +17,23 @@ func GetRemoveContainerCmd() *cli.Command {
 }
 
 func RemoveContainerAction(cCtx *cli.Context) error {
+	containerName := cCtx.Args().Get(0)
+	container, err := helpers.GetContainerByName(containerName)
+
+	if err != nil {
+		log.Fatalln("container does not exists")
+	}
+
+	wkspaceData := helpers.GetWorkspaces()
+
+	for index, wkspace := range wkspaceData {
+		if container.ID == wkspace.Id {
+			wkspaceData = append(wkspaceData[:index], wkspaceData[index+1:]...)
+			break
+		}
+	}
+
+	helpers.SaveWorkspaceData(wkspaceData)
+
 	return nil
 }

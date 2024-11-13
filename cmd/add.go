@@ -19,22 +19,21 @@ func GetAddContainerCmd() *cli.Command {
 
 func AddContainerAction(cCtx *cli.Context) error {
 	containerName := cCtx.Args().Get(0)
-
-	if containerName == "" {
-		log.Fatalln("provide a container name")
-	}
-
-	wkspaceFolder := helpers.GetWkspaceFolder()
-	wkspaceData := helpers.GetWorkspaces()
-
-	container, err := helpers.GetContainerByName("wkspace")
+	container, err := helpers.GetContainerByName(containerName)
 
 	if err != nil {
 		log.Fatalln("container does not exists")
 	}
 
-	wkspaceData = append(wkspaceData, schemas.Workspace{Name: containerName, Id: container.ID})
-	helpers.CreateJSONFile(wkspaceData, wkspaceFolder, "wkspace")
+	wkspaceData := helpers.GetWorkspaces()
+	wkspace := schemas.Workspace{Name: containerName, Id: container.ID, Default: false}
+
+	if len(wkspaceData) == 0 {
+		wkspace.Default = true
+	}
+
+	wkspaceData = append(wkspaceData, wkspace)
+	helpers.SaveWorkspaceData(wkspaceData)
 
 	return nil
 }

@@ -18,12 +18,7 @@ func GetDefaultContainerCmd() *cli.Command {
 
 func DefaultContainerAction(cCtx *cli.Context) error {
 	containerName := cCtx.Args().Get(0)
-
-	if containerName == "" {
-		log.Fatalln("provide a container name")
-	}
-
-	container, err := helpers.GetContainerByName("wkspace")
+	container, err := helpers.GetContainerByName(containerName)
 
 	if err != nil {
 		log.Fatalln("container does not exists")
@@ -33,9 +28,10 @@ func DefaultContainerAction(cCtx *cli.Context) error {
 	wkspaceData := helpers.GetWorkspaces()
 
 	for i := range wkspaceData {
+		wkspaceData[i].Default = false
+
 		if wkspaceData[i].Id == container.ID {
 			wkspaceData[i].Default = true
-			break
 		}
 	}
 
