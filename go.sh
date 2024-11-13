@@ -4,6 +4,7 @@
 PROJECT_ROOT="."
 
 IMAGE_NAME="wkspace"
+CLI_NAME="wkspace"
 CONTAINER_NAME=$IMAGE_NAME
 DOCKERFILE_PATH=$PROJECT_ROOT
 
@@ -45,12 +46,15 @@ remove_workspace() {
 }
 
 compile_project() {
-  GOOS=linux GOARCH=amd64 go build -buildvcs=false -o wkspace-$VERSION
+  GOOS=linux GOARCH=amd64 go build -buildvcs=false -o $CLI_NAME
 }
 
 package_project() {
-  tar -czvf tig-$VERSION.tar.gz ./wkspace-$VERSION
+  compile_project
+  tar -czvf $CLI_NAME-$VERSION.tar.gz ./$CLI_NAME
+  rm ./$CLI_NAME
 }
+
 
 if [ "$1" == "build" ]; then
   build_container
