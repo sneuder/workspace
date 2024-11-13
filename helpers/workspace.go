@@ -8,7 +8,16 @@ import (
 
 func GetDefaultWkspace() schemas.Workspace {
 	wkspaces := GetWorkspaces()
-	return wkspaces[0]
+	foundWkspace := schemas.Workspace{}
+
+	for _, wkspace := range wkspaces {
+		if wkspace.Default {
+			foundWkspace = wkspace
+			break
+		}
+	}
+
+	return foundWkspace
 }
 
 func GetWorkspaces() []schemas.Workspace {

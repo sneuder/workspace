@@ -17,6 +17,7 @@ func SetCmd() {
 			cmd.GetAddContainerCmd(),
 			cmd.GetRemoveContainerCmd(),
 			cmd.GetDefaultContainerCmd(),
+			cmd.GetLsContainerCmd(),
 		},
 	}
 
