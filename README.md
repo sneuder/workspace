@@ -10,7 +10,7 @@ This tool uses docker, it is important to have it in your local machine.
 
 **1. Download the executable file**
 ```
-wget https://github.com/wkspace.tar.gz
+wget https://github.com/sneuder/workspace/releases/download/<version>/wkspace-<version>.tar.gz
 ```
 
 **2. Unpack the downloaded file**
