@@ -33,5 +33,5 @@ func GetWorkspaces() []schemas.Workspace {
 
 func SaveWorkspaceData(wkspaceData []schemas.Workspace) {
 	wkspaceFolder := GetWkspaceFolder()
-	CreateJSONFile(wkspaceData, wkspaceFolder, "wkspace")
+	CreateJSONFile(wkspaceData, wkspaceFolder, constants.FOLDER_WKSPACE)
 }

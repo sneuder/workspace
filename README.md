@@ -63,7 +63,7 @@ wkspace ls -l
 wkspace git status
 ```
 
-Any comand you use will be use within the deafult container's terminal
+Any comand you use will be used within the deafult container's terminal
 
 - Help
 ```

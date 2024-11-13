@@ -4,6 +4,7 @@ import (
 	"log"
 	"os"
 	"workspace/cmd"
+	"workspace/constants"
 	"workspace/helpers"
 	"workspace/schemas"
 
@@ -28,11 +29,11 @@ func SetCmd() {
 
 func SetFolder() {
 	homerDir := helpers.GetHomeDir()
-	helpers.CreateFolder(homerDir, ".wkspace")
+	helpers.CreateFolder(homerDir, constants.FOLDER_WKSPACE)
 }
 
 func SetJsonFile() {
 	wkspaceFolder := helpers.GetWkspaceFolder()
 	data := []schemas.Workspace{}
-	helpers.CreateJSONFile(data, wkspaceFolder, "wkspace")
+	helpers.CreateJSONFile(data, wkspaceFolder, constants.FOLDER_WKSPACE)
 }
