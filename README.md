@@ -10,22 +10,17 @@ This tool uses docker, it is important to have it in your local machine.
 
 **1. Download the executable file**
 ```
-wget https://github.com/sneuder/workspace/releases/download/v<version>/wkspace-<version>.tar.gz
+wget https://github.com/sneuder/workspace/releases/download/v1.0.0/install.sh
 ```
 
-**2. Unpack the downloaded file**
+**2. Make the Script Executable**
 ```
-tar -xzf wkspace-<version>.tar.gz
-```
-
-**3. Move the directory**
-```
-sudo mv ./wkspace /usr/local/bin/wkspace
+sudo chmod +x install.sh
 ```
 
-**4. Verify the move**
+**3. Run the Script**
 ```
-which wkspace
+sudo ./install.sh
 ```
 
 ## Commands
@@ -67,5 +62,5 @@ Any comand you use will be used within the deafult container's terminal
 
 - Help
 ```
-tig help
+wkspace help
 ```
