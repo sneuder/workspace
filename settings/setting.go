@@ -35,5 +35,5 @@ func SetFolder() {
 func SetJsonFile() {
 	wkspaceFolder := helpers.GetWkspaceFolder()
 	data := []schemas.Workspace{}
-	helpers.CreateJSONFile(data, wkspaceFolder, constants.FOLDER_WKSPACE)
+	helpers.CreateJSONFile(data, wkspaceFolder, constants.JSON_FILE_WKSPACE)
 }
